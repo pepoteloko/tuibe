@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helpers\FlightApiHelper;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -17,10 +18,23 @@ class Controller extends BaseController
         return view('index')->with(['title' => 'Titulo']);
     }
 
-    public function to(Request $request)
+    public function ajax(Request $request)
     {
-        dd($request->all());
+        $params = $request->all();
+        $function = $request->get('action', 'error');
 
-        return response()->json($data);
+        $helper = new FlightApiHelper();
+        switch ($function) {
+            case 'from':
+                $response = $helper->getDestinationsAvailableFrom($params);
+                break;
+            case 'to':
+                $response = $helper->getDestinationsAvailableTo($params);
+                break;
+            default:
+                $response = 'Error';
+        }
+
+        return response()->json($response);
     }
 }

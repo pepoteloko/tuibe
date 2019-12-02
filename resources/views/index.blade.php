@@ -37,8 +37,9 @@
                         <div class="form-row">
                             <div class="col-3">
                                 <div class="form-group">
-                                    <label for="from">from
+                                    <label for="from">from:
                                         <select name="from" class="form-control">
+                                            <option value="empty">-</option>
                                             <option value="AGP">Málaga</option>
                                             <option value="BCN">Barcelona</option>
                                         </select>
@@ -48,10 +49,9 @@
 
                             <div class="col-3">
                                 <div class="form-group">
-                                    <label for="to">from
+                                    <label for="to">to:
                                         <select name="to" class="form-control">
-                                            <option value="AGP">Málaga</option>
-                                            <option value="BCN">Barcelona</option>
+                                            <option value="empty">-</option>
                                         </select>
                                     </label>
                                 </div>
@@ -132,14 +132,21 @@
         $(function () {
             $('.j-search').on('change', 'select[name="from"]', function (e) {
                 $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     dataType: 'json',
-                    url: "/ajax",
+                    url: "{{ route('ajax') }}",
                     data: {
                         action: 'from',
                         airport: $(this).val()
                     },
                     success: function (result) {
-                        alert(result)
+                        $select = $('select[name="to"]').html();
+                        $.each(result,function(key, value)
+                        {
+                            $select.append('<option value=' + key + '>' + value + '</option>');
+                        });
                     }
                 });
             }).on('click', 'a', function () {
