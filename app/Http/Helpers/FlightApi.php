@@ -41,7 +41,9 @@ class FlightApi
      */
     public function schedules(array $params)
     {
-        return $this->makeCall('flightschedules/', $params);
+        $data = $this->makeCall('flightschedules/', $params);
+
+        return $data->flightschedules;
     }
 
     /**

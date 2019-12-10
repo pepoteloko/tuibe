@@ -9,10 +9,21 @@
 
     <div class="row">
 
+        @if($errors->any())
+            <div class="col-12">
+                @foreach($errors->getMessages() as $this_error)
+                    <div class="alert alert-warning" role="alert">
+                        {{$this_error[0]}}
+                    </div>
+                @endforeach
+            </div>
+        @endif
+
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form class="j-search">
+                    <form class="j-search" method="post" action="{{ route('booking') }}">
+                        @csrf
                         <div class="form-row">
                             <div class="col-3">
                                 <h4 class="card-title">Search a flight</h4>
@@ -116,7 +127,7 @@
                             <div class="col-3">
                                 <label>
                                     &nbsp;
-                                    <a class="btn btn-success">Enviar</a>
+                                    <button type="submit" class="btn btn-success">Enviar</button>
                                 </label>
                             </div>
                         </div>
@@ -142,16 +153,14 @@
                         airport: $(this).val()
                     },
                     success: function (result) {
-                        $select = $('select[name="to"]').html();
-                        $.each(result,function(key, value)
-                        {
+                        $select = $('select[name="to"]');
+                        $select.html();
+                        $.each(result, function (key, value) {
                             $select.append('<option value=' + key + '>' + value + '</option>');
                         });
                     }
                 });
-            }).on('click', 'a', function () {
-                alert('hola');
-            })
+            });
         });
     </script>
 @endpush

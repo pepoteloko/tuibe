@@ -12,4 +12,5 @@
 */
 
 Route::get('/', ['as' => 'index', 'uses' => 'Controller@index']);
+Route::post('booking', ['as' => 'booking', 'uses' => 'Controller@booking']);
 Route::get('ajax', ['as' => 'ajax', 'uses' => 'Controller@ajax']);

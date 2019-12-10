@@ -4,6 +4,8 @@
 namespace App\Http\Helpers;
 
 
+use Carbon\Carbon;
+
 class FlightApiHelper
 {
     /**
@@ -59,6 +61,29 @@ class FlightApiHelper
         }
 
         return $data;
+    }
+
+    /**
+     * @param $params
+     *
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getAvailableFlights($params)
+    {
+        $departure = Carbon::createFromFormat('Y-m-d', $params['departure']);
+        $return = Carbon::createFromFormat('Y-m-d', $params['return']);
+
+        $response = $this->api->availability([
+            'departureairport' => $params['from'],
+            'destinationairport' => $params['to'],
+            'returndepartureairport' => $params['to'],
+            'returndestiantionairport' => $params['from'],
+            'departuredate' => $departure->format('Ymd'),
+            'returndate' => $return->format('Ymd'),
+        ]);
+
+        return $response->flights;
     }
 //        $data = $helper->routes(['departureairport' => 'AGP']);
 //        var_dump($data);
